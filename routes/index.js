@@ -9,7 +9,7 @@ router.post('/signup', validateCreateUser, createUser);
 router.use('/users', auth, require('./users'));
 router.use('/movies', auth, require('./movies'));
 
-router.get('/signout', (req, res) => {
+router.get('/signout', auth, (req, res) => {
   res.clearCookie('jwt').send({ message: 'Выход' });
 });
 

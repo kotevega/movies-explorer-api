@@ -16,7 +16,7 @@ const getAboutUser = (req, res, next) => {
     .orFail(() => new ErrorNotFound('Данных с указанным id не существует'))
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         next(new ErrorValidation('Запрашиваемые данные не найдены'));
       } else {
         next(err);
@@ -33,8 +33,11 @@ const patchUserProfile = (req, res, next) => {
   )
     .then((user) => res.send(user))
     .catch((err) => {
+      if (err.code === 11000) {
+        next(new ErrorConflict('Данный email уже зарегистрирован'));
+      }
       if (err.name === 'ValidationError') {
-        next(new ErrorValidation('Переданные некорректные данные'));
+        next(new ErrorValidation('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -58,7 +61,7 @@ const createUser = (req, res, next) => {
       if (err.code === 11000) {
         return next(new ErrorConflict('Данный email уже зарегистрирован'));
       }
-      if (err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         next(new ErrorValidation('Запрашиваемые данные не найдены'));
       } else {
         next(err);

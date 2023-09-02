@@ -6,7 +6,8 @@ const {
 } = require('../utils/error');
 
 const getMovies = (req, res, next) => {
-  Movie.find()
+  const id = req.user._id;
+  Movie.find({ owner: id })
     .then((movie) => res.send(movie))
     .catch(next);
 };
@@ -43,7 +44,7 @@ const postMovie = (req, res, next) => {
     .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new ErrorValidation('Переданные некорректные данные'));
+        return next(new ErrorValidation('Переданы некорректные данные'));
       }
       next(err);
     });
