@@ -14,11 +14,13 @@ const { PORT, DB_URL } = process.env;
 
 const app = express();
 
-mongoose.connect(DB_URL, {
+mongoose.connect(process.env.NODE_ENV === 'production' ? DB_URL : 'mongodb://127.0.0.1:27017/bitfilmsdb', {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 });
 
+app.use(errorLogger);
+app.use(requestLogger);
 app.use(limiter);
 app.use(helmet());
 app.use(express.json());
@@ -37,11 +39,9 @@ app.use(
 // });
 
 app.use(router);
-app.use(errorLogger);
+
 app.use(errors());
 app.use(error);
-app.use(requestLogger);
-
-app.listen(PORT, () => {
+app.listen(process.env.NODE_ENV === 'production' ? PORT : '3000', () => {
   console.log(`Слушаем ${PORT} порт`);
 });
