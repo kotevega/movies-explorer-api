@@ -90,6 +90,7 @@ const login = (req, res, next) => {
               maxAge: 604800,
               httpOnly: true,
               sameSite: true,
+              secure: true,
             });
             res.send({ message: 'Регистрация успешна' });
           } else {
