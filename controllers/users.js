@@ -73,7 +73,7 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .select('+password')
-    .orFail(() => new ErrorUnauthorized('Неправильные почта или пароль'))
+    .orFail(() => new ErrorUnauthorized('Необходима авторизация'))
     .then((user) => {
       bcrypt
         .compare(password, user.password)
@@ -94,7 +94,7 @@ const login = (req, res, next) => {
             });
             res.send({ message: 'Регистрация успешна' });
           } else {
-            next(new ErrorUnauthorized('Неправильные почта или пароль'));
+            next(new ErrorUnauthorized('Необходима авторизация'));
           }
         })
         .catch(next);
