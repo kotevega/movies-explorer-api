@@ -31,7 +31,7 @@ const patchUserProfile = (req, res, next) => {
     { name, email },
     { new: true, runValidators: true },
   )
-    .then((user) => res.send(user))
+    .then((user) => res.send({ user, message: 'Обновление данных успешно' }))
     .catch((err) => {
       if (err.code === 11000) {
         next(new ErrorConflict('Данный email уже зарегистрирован'));
