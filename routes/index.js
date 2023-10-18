@@ -10,7 +10,11 @@ router.use('/users', auth, require('./users'));
 router.use('/movies', auth, require('./movies'));
 
 router.post('/signout', auth, (req, res) => {
-  res.clearCookie('jwt');
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
   return res.send({ message: 'Выход' });
 });
 
